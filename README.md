@@ -2,5 +2,5 @@
 
 ## Courses
 
-### - [x] CSE167X - Intro to Computer Graphics (edX online course) 
+- [x] CSE167X - Intro to Computer Graphics (edX online course) 
 

@@ -1,6 +1,4 @@
-# CSE167X - Intro to Computer Graphics 
-
-## - [x] Homework 1
+# Homework 1
 
 Transform.cpp is where all the work is done; rotate(), left(), up(), lookAt() were written by me.
 
