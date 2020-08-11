@@ -1,2 +1,4 @@
 # Homework 0
-Just run `make` to test if your computer's environment is set up
+Just run `make` followed by `./mytest3`
+
+If everything runs smoothly, your computer environment is set up.
