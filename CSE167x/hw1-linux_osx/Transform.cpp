@@ -42,50 +42,40 @@ mat3 Transform::rotate(const float degrees, const vec3& axis) {
 void Transform::left(float degrees, vec3& eye, vec3& up) {
 	// YOUR CODE FOR HW1 HERE
 
-	// translate the up vector to the origin (-eye)
-	vec3 w = normalize(eye);
-	vec3 u = normalize(cross(up, w));
-	vec3 v = cross(w, u);
-	//vec3 axis = mat
-
-	mat3 rMatrix = rotate(degrees, v);
+	mat3 rMatrix = rotate(degrees, up);
 	
-	// calculate the dist from eye to origin (should ALWAYS be the same)
-	printf("ROTATING ON up (v): %.2f, %.2f, %.2f;", v.x, v.y, v.z);
-	printf("horizontal (u): %.2f, %.2f, %.2f;", u.x, u.y, u.z);
-
 	// update the eye vector after rotating it
 	eye = rMatrix * eye;
-
-	//printf("Coordinates: %.2f, %.2f, %.2f; distance: %.2f\n", eye.x, eye.y, eye.z, sqrt(pow(eye.x, 2) + pow(eye.y, 2) + pow(eye.z, 2)));
-
-
-	// update the up vector
-	// get u, which is orthogonal to up (v) and eye (w)
-	w = normalize(eye);
-	u = normalize(cross(up, w));
-	v = cross(w, u);
-	// IMPORTANT: up will not work if it does not result in a unit vector
-	up = v;
-
 }
 
 // Transforms the camera up around the "crystal ball" interface
 void Transform::up(float degrees, vec3& eye, vec3& up) {
 	// YOUR CODE FOR HW1 HERE 
 
+	// u, v, w is essentially the camera's x, y, z, respectively.
+	// Definitions: eye (w), up (v), horizontal/x-axis (u)
+
+	// we need w to derive u
 	vec3 w = normalize(eye);
+
+	// we need u to rotate about u/the camera's x-axis
 	vec3 u = normalize(cross(up, w));
-	vec3 v = cross(w, u);
+
+	// we do not need to know v/up, since we are not rotating around the camera's y-axis
+	//vec3 v = cross(w, u);
 	
-	printf("up (v): %.2f, %.2f, %.2f;", v.x, v.y, v.z);
-	printf("ROTATING ON horizontal (u): %.2f, %.2f, %.2f;", u.x, u.y, u.z);	
+	//printf("up (v): %.2f, %.2f, %.2f;", v.x, v.y, v.z);
+	//printf("ROTATING ON horizontal (u): %.2f, %.2f, %.2f;", u.x, u.y, u.z);	
 
 	mat3 rMatrix = rotate(-degrees, u);
 
 	eye = rMatrix * eye;
 
-	up = cross(normalize(eye), normalize(cross(up, normalize(eye))));
+	// IMPORTANT: up will not work if it is not in the format of a unit vector
+
+	// up needs to be updated since it changes when we rotate about u/horizontal-axis; u always gets calculated on the fly, so we don't need to update or store the value anywhere
+	// up doesn't need to be updated in left() because it never changes when rotating about v/up
+	up = cross(normalize(eye), u);
 }
 
 // Your implementation of the glm::lookAt matrix
@@ -107,7 +97,7 @@ mat4 Transform::lookAt(vec3 eye, vec3 up) {
 				0, 0, 0, 1 	);
 
 	// IMPORTANT: always translate before rotate for look at matrix
-	// matrix multiplication goes from left -> right
+	// matrix multiplication goes from right -> left
 	mat4 final = rotate * translate;
 
 

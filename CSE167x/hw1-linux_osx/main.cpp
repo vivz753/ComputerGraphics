@@ -23,7 +23,9 @@ int amount; // The amount of rotation for each arrow press
 
 vec3 eye; // The (regularly updated) vector coordinates of the eye location 
 vec3 up;  // The (regularly updated) vector coordinates of the up location 
+// you can change eyeinit to pretty much anything and it'll still rotate correctly b/c it's just the camera's position; whereas up determines the axes of rotations
 const vec3 eyeinit(0.0,0.0,7.0); // Initial eye position, also for resets
+// changing the upinit to (1, 1, 0) will tilt the camera 45 degrees NorthEast)
 const vec3 upinit(0.0,1.0,0.0); // Initial up position, also for resets
 const int amountinit = 5; //Initial step amount for camera movement, also for resets
 
