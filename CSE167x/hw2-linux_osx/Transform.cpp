@@ -91,7 +91,8 @@ mat4 Transform::perspective(float fovy, float aspect, float zNear, float zFar)
   // New, to implement the perspective transform as well.  
 
 	// convert fovy to radians?
-	float theta=fovy/2;
+	
+	float theta=radians(fovy)/2;
 
 	// assuming y'=1
 	float d = 1/(tan(theta));
