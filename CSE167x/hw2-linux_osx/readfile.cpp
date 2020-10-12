@@ -171,6 +171,16 @@ void readfile(const char* filename)
             // to set up correctly. 
             // Set eyeinit upinit center fovy in variables.h 
 
+            vec3 lookFrom = vec3(values[0], values[1], values[2]);
+            eyeinit = lookFrom;
+
+            vec3 lookAt = vec3(values[3], values[4], values[5]);
+            center = lookAt;  
+ 
+            vec3 up = vec3(values[6], values[7], values[8]);
+            upinit = Transform::upvector(up, lookAt-lookFrom);
+
+            fovy = values[9];
           }
         }
 
