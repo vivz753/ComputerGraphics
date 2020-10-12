@@ -68,6 +68,9 @@ void display()
     // The lightransf[] array in variables.h and transformvec() might also be useful here.
     // Remember that light positions must be transformed by modelview.  
 
+
+
+
   } else {
     glUniform1i(enablelighting,false); 
   }
@@ -81,13 +84,13 @@ void display()
   // You need to use scale, translate and modelview to 
   // set up the net transformation matrix for the objects.  
   // Account for GLM issues, matrix order, etc.  
-	transf = modelview * sc * tr;
+	transf = tr * sc;
 
   
   // The object draw functions will need to further modify the top of the stack,
   // so assign whatever transformation matrix you intend to work with to modelview
   // rather than use a uniform variable for that.
-  modelview = transf;
+  modelview = transf * modelview; 
 
   for (int i = 0 ; i < numobjects ; i++) {
     object* obj = &(objects[i]); // Grabs an object struct.
