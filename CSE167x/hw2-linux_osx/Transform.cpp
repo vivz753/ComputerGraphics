@@ -102,7 +102,7 @@ mat4 Transform::perspective(float fovy, float aspect, float zNear, float zFar)
 
 	mat4 perspective = mat4(d/aspect, 0, 0, 0,
 													0, d, 0, 0,
-													0, 0, (-f+n)/(f-n), -1,
+													0, 0, -1*(f+n)/(f-n), -1,
 													0, 0, -2*f*n/(f-n), 0);
 	// vec4 persp = vec4(x, y, z, 1);
 
