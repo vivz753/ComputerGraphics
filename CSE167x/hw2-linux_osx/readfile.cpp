@@ -114,18 +114,11 @@ void readfile(const char* filename)
               // Make use of lightposn[] and lightcolor[] arrays in variables.h
               // Those arrays can then be used in display too.  
 
-							//matransform(transfstack, values);
 							int x = numused*4;
 
-							for (i=0; i<8; i++) {
-								if(i<4) {
-									lightposn[x+i] = values[i];
-									std::cout << "readfile.cpp: storing lightposn[" << x+i << "] the value " << values[i] << std::endl;
-								}								
-								else if(i>=4) {
-									lightcolor[x+(i%4)] = values[i];
-									std::cout << "readfile.cpp: storing lightcolor[" << x+(i%4) << "] the value " << values[i] << std::endl;
-								}
+							for (i=0; i<4; i++) {
+								lightposn[x+i] = values[i];
+								lightcolor[x+i] = values[i+4];
 							}
 
               ++numused; 
@@ -196,7 +189,7 @@ void readfile(const char* filename)
 						vec3 lookAt = vec3(values[3], values[4], values[5]);
 						center = lookAt;			
 			
-						vec3 up = vec3(values[6], values[7], values[8]);
+						vec3 up = normalize(vec3(values[6], values[7], values[8]));
 						upinit = Transform::upvector(up, lookAt-lookFrom);
 
 						//std::cout << to_string(lookFrom) << to_string(lookAt) << to_string(upinit) << std::endl;
@@ -259,8 +252,8 @@ void readfile(const char* filename)
 						cout << "readfile.cpp: [translateMat] " << endl << to_string(translateMat) << endl << endl;
 
 						
-						rightmultiply(translateMat, transfstack);
-						//*(&transfstack.top()) = transfstack.top() * translateMat;				
+						//rightmultiply(translateMat, transfstack);
+						*(&transfstack.top()) = transfstack.top() * translateMat;				
 	
 						cout << "readfile.cpp: [translate] " << endl << to_string(transfstack.top()) << endl << endl;
 					
@@ -276,8 +269,8 @@ void readfile(const char* filename)
             // Also keep in mind what order your matrix is!
 						mat4 scaleMat = Transform::scale(values[0], values[1], values[2]);
 						//multiply stack
-						rightmultiply(scaleMat, transfstack);
-						//*(&transfstack.top()) = transfstack.top() * scaleMat;				
+						//rightmultiply(scaleMat, transfstack);
+						*(&transfstack.top()) = transfstack.top() * scaleMat;				
 
 
 						cout << "readfile.cpp: [scale] " << endl << to_string(transfstack.top()) << endl << endl;
@@ -303,8 +296,8 @@ void readfile(const char* filename)
 //std::cout << glm::to_string(rotateMat4) << std::endl;
 						
 						//multiply the matrix stack
-						rightmultiply(rotateMat4, transfstack);
-						//*(&transfstack.top()) = transfstack.top() * rotateMat4;				
+						//rightmultiply(rotateMat4, transfstack);
+						*(&transfstack.top()) = transfstack.top() * rotateMat4;				
 
 						cout << "readfile.cpp: [rotate] " << endl << to_string(transfstack.top()) << endl << endl;;
 
