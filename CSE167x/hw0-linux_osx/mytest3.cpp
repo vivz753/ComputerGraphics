@@ -211,7 +211,6 @@ void display(void)
 	// don't wait! 
 	// start processing buffered OpenGL routines
 
-
 	glutSwapBuffers();
 	glFlush();
 }
