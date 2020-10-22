@@ -53,7 +53,7 @@ void main (void)
         vec4 finalcolor; 
 
         // Color all pixels black for now, remove this in your implementation!
-        finalcolor = vec4(0.0f, 0.0f, 0.0f, 1.0f); 
+        finalcolor = vec4(0.0f, 0.0f, 0.0f, 0.0f); 
 
         // YOUR CODE FOR HW 2 HERE
         // A key part is implementation of the fragment shader
@@ -77,8 +77,8 @@ void main (void)
 					direction = normalize(vec3(lightposn[index].xyz));
 
 					// Point Light; otherwise Directional
-					if (lightposn[index].w ==1) {
-						direction = normalize( (direction / lightposn[index].w) - mypos); //no attenuation
+					if (lightposn[index].w !=0) {
+						direction = normalize( (lightposn[index].xyz / lightposn[index].w) - mypos); //no attenuation
 					}
 
 					halfang = normalize(direction + eyedirn);
@@ -89,7 +89,7 @@ void main (void)
 				}
 
 
-        fragColor = ambient + emission + finalcolor; 
+        fragColor = ambient +  emission + finalcolor; 
     } else {
         fragColor = vec4(color, 1.0f); 
     }
