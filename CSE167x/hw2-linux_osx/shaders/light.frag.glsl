@@ -34,18 +34,62 @@ uniform vec4 specular;
 uniform vec4 emission; 
 uniform float shininess; 
 
+vec4 ComputeLight(vec3 direction, vec4 lightcolor, vec3 normal, vec3 halfvec, vec4 mydiffuse, vec4 myspecular, float myshininess) {
+
+	float nDotL = dot(normal, direction);
+	vec4 lambert = mydiffuse * lightcolor * max (nDotL, 0.0);
+	
+	float nDotH = dot(normal, halfvec);
+	vec4 phong = myspecular * lightcolor * pow(max(nDotH, 0.0), myshininess);
+
+	vec4 retval = lambert + phong;
+	return retval;
+}
+
+
 void main (void) 
 {       
     if (enablelighting) {       
         vec4 finalcolor; 
 
-        // YOUR CODE FOR HW 2 HERE
-        // A key part is implementation of the fragment shader
-
         // Color all pixels black for now, remove this in your implementation!
         finalcolor = vec4(0.0f, 0.0f, 0.0f, 1.0f); 
 
-        fragColor = finalcolor; 
+        // YOUR CODE FOR HW 2 HERE
+        // A key part is implementation of the fragment shader
+
+				// mynormal, myvertex from light.vert.glsl
+				const vec3 eyepos = vec3(0,0,0);
+				vec4 vertex = modelview*myvertex;
+				vec3 mypos = vertex.xyz / vertex.w; //dehomegenize current location
+				vec3 eyedirn = normalize(eyepos-mypos);
+
+				vec3 normal = normalize(mynormal);
+
+				vec3 direction, halfang;
+				vec4 lightcol, col;
+
+				// Compute the array of lights in lightposn
+				// directional lights have 0 as w; point lights have 1 as w
+				for (int i = 0; i < numused; ++i) {
+					int index = i;
+
+					direction = normalize(vec3(lightposn[index].xyz));
+
+					// Point Light; otherwise Directional
+					if (lightposn[index].w ==1) {
+						direction = normalize( (direction / lightposn[index].w) - mypos); //no attenuation
+					}
+
+					halfang = normalize(direction + eyedirn);
+					lightcol = vec4(lightcolor[index]);
+					col = ComputeLight(direction, lightcol, normal, halfang, diffuse, specular, shininess);
+
+					finalcolor += col;
+				}
+
+
+        fragColor = ambient + emission + finalcolor; 
     } else {
         fragColor = vec4(color, 1.0f); 
     }

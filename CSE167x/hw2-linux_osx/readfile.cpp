@@ -21,6 +21,7 @@
 /*****************************************************************************/
 
 // Basic includes to get this file to work.  
+#include <glm/gtx/string_cast.hpp>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -38,6 +39,7 @@
 #include "Transform.h" 
 
 using namespace std;
+using namespace glm;
 #include "variables.h" 
 #include "readfile.h"
 
@@ -112,6 +114,20 @@ void readfile(const char* filename)
               // Make use of lightposn[] and lightcolor[] arrays in variables.h
               // Those arrays can then be used in display too.  
 
+							//matransform(transfstack, values);
+							int x = numused*4;
+
+							for (i=0; i<8; i++) {
+								if(i<4) {
+									lightposn[x+i] = values[i];
+									std::cout << "readfile.cpp: storing lightposn[" << x+i << "] the value " << values[i] << std::endl;
+								}								
+								else if(i>=4) {
+									lightcolor[x+(i%4)] = values[i];
+									std::cout << "readfile.cpp: storing lightcolor[" << x+(i%4) << "] the value " << values[i] << std::endl;
+								}
+							}
+
               ++numused; 
             }
           }
@@ -170,17 +186,22 @@ void readfile(const char* filename)
             // You may need to use the upvector fn in Transform.cpp
             // to set up correctly. 
             // Set eyeinit upinit center fovy in variables.h 
+						
+						//for(i=0; i<10; i++) { std::cout << values[i] << std::endl; }
+						//std::cout << to_string(eyeinit) << to_string(center) << to_string(upinit) << std::endl;
 
-            vec3 lookFrom = vec3(values[0], values[1], values[2]);
-            eyeinit = lookFrom;
+						vec3 lookFrom = vec3(values[0], values[1], values[2]);
+						eyeinit = lookFrom;
 
-            vec3 lookAt = vec3(values[3], values[4], values[5]);
-            center = lookAt;  
- 
-            vec3 up = vec3(values[6], values[7], values[8]);
-            upinit = Transform::upvector(up, lookAt-lookFrom);
+						vec3 lookAt = vec3(values[3], values[4], values[5]);
+						center = lookAt;			
+			
+						vec3 up = vec3(values[6], values[7], values[8]);
+						upinit = Transform::upvector(up, lookAt-lookFrom);
 
-            fovy = values[9];
+						//std::cout << to_string(lookFrom) << to_string(lookAt) << to_string(upinit) << std::endl;
+
+						fovy = values[9];
           }
         }
 
@@ -206,7 +227,9 @@ void readfile(const char* filename)
               obj->shininess = shininess; 
 
               // Set the object's transform
+							cout << "readfile.cpp [transfstack.top()] " << endl << to_string(transfstack.top()) << endl << endl;
               obj->transform = transfstack.top(); 
+							cout << "readfile.cpp [obj->transform] " << endl << to_string(obj->transform) << endl << endl;
 
               // Set the object's type
               if (cmd == "sphere") {
@@ -230,6 +253,16 @@ void readfile(const char* filename)
             // You might want to use helper functions on top of file. 
             // Also keep in mind what order your matrix is!
 
+						mat4 translateMat = Transform::translate(values[0], values[1], values[2]);
+						//multiply the stack here
+						cout << "values[0]: " << values[0] << " values[1]: " << values[1] << " values[2]: " << values[2] << endl << endl;
+						cout << "readfile.cpp: [translateMat] " << endl << to_string(translateMat) << endl << endl;
+
+						
+						rightmultiply(translateMat, transfstack);
+					
+						cout << "readfile.cpp: [translate] " << endl << to_string(transfstack.top()) << endl << endl;
+					
           }
         }
         else if (cmd == "scale") {
@@ -240,6 +273,11 @@ void readfile(const char* filename)
             // Think about how the transformation stack is affected
             // You might want to use helper functions on top of file.  
             // Also keep in mind what order your matrix is!
+						mat4 scaleMat = Transform::scale(values[0], values[1], values[2]);
+						//multiply stack
+						rightmultiply(scaleMat, transfstack);
+
+						cout << "readfile.cpp: [scale] " << endl << to_string(transfstack.top()) << endl << endl;
 
           }
         }
@@ -253,6 +291,18 @@ void readfile(const char* filename)
             // See how the stack is affected, as above.  
             // Note that rotate returns a mat3. 
             // Also keep in mind what order your matrix is!
+
+						mat3 rotateMat3 = Transform::rotate(values[3], vec3(values[0], values[1], values[2]));
+//std::cout << to_string(rotateMat3) << std::endl;
+
+						//somehow transfer mat3 to mat4
+						mat4 rotateMat4 = mat4(rotateMat3); 
+//std::cout << glm::to_string(rotateMat4) << std::endl;
+						
+						//multiply the matrix stack
+						rightmultiply(rotateMat4, transfstack);
+						
+						cout << "readfile.cpp: [rotate] " << endl << to_string(transfstack.top()) << endl << endl;;
 
           }
         }
@@ -290,4 +340,6 @@ void readfile(const char* filename)
     cerr << "Unable to Open Input Data File " << filename << "\n"; 
     throw 2; 
   }
+
+std::cout << "number of lights: " << numused << std::endl;
 }
