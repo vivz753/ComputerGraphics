@@ -153,14 +153,13 @@ void display()
   // You need to use scale, translate and modelview to 
   // set up the net transformation matrix for the objects.  
   // Account for GLM issues, matrix order, etc.  
-	transf = tr * sc;
+	transf =modelview* tr * sc;
 
   
   // The object draw functions will need to further modify the top of the stack,
   // so assign whatever transformation matrix you intend to work with to modelview
   // rather than use a uniform variable for that.
-  modelview = modelview*transf; 
-	glUniformMatrix4fv(modelviewPos, 1, GL_FALSE, &(modelview)[0][0]);
+  //modelview = modelview*transf; 
 
   for (int i = 0 ; i < numobjects ; i++) {
     object* obj = &(objects[i]); // Grabs an object struct.
@@ -172,7 +171,7 @@ void display()
 
 		// Transform
 		cout << "display.cpp: [obj->transform mat4] " << endl << to_string(obj->transform) << endl;
-		modelview = modelview * obj->transform;
+		modelview = transf* obj->transform;
 		glUniformMatrix4fv(modelviewPos, 1, GL_FALSE, &(modelview)[0][0]);
 
 

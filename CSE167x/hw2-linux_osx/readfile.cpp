@@ -260,7 +260,8 @@ void readfile(const char* filename)
 
 						
 						rightmultiply(translateMat, transfstack);
-					
+						//*(&transfstack.top()) = transfstack.top() * translateMat;				
+	
 						cout << "readfile.cpp: [translate] " << endl << to_string(transfstack.top()) << endl << endl;
 					
           }
@@ -276,6 +277,8 @@ void readfile(const char* filename)
 						mat4 scaleMat = Transform::scale(values[0], values[1], values[2]);
 						//multiply stack
 						rightmultiply(scaleMat, transfstack);
+						//*(&transfstack.top()) = transfstack.top() * scaleMat;				
+
 
 						cout << "readfile.cpp: [scale] " << endl << to_string(transfstack.top()) << endl << endl;
 
@@ -301,7 +304,8 @@ void readfile(const char* filename)
 						
 						//multiply the matrix stack
 						rightmultiply(rotateMat4, transfstack);
-						
+						//*(&transfstack.top()) = transfstack.top() * rotateMat4;				
+
 						cout << "readfile.cpp: [rotate] " << endl << to_string(transfstack.top()) << endl << endl;;
 
           }

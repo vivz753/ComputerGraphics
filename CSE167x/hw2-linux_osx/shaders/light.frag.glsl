@@ -64,14 +64,14 @@ void main (void)
 				vec3 mypos = vertex.xyz / vertex.w; //dehomegenize current location
 				vec3 eyedirn = normalize(eyepos-mypos);
 
-				vec3 normal = normalize(mynormal);
+				vec3 normal = normalize( mat3(transpose(inverse(modelview))) * mynormal);
 
 				vec3 direction, halfang;
 				vec4 lightcol, col;
 
 				// Compute the array of lights in lightposn
 				// directional lights have 0 as w; point lights have 1 as w
-				for (int i = 0; i < numused; ++i) {
+				for (int i = 0; i < numused; i++) {
 					int index = i;
 
 					direction = normalize(vec3(lightposn[index].xyz));

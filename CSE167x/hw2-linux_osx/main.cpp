@@ -203,7 +203,7 @@ int main(int argc, char* argv[]) {
 #else
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 #endif
-	//glutInitWindowSize(w,h);
+	glutInitWindowSize(w,h);
 
   glutCreateWindow("HW2: Scene Viewer");
 
