@@ -3,7 +3,7 @@
 ## Courses
 
 - [ ] CSE167X - Intro to Computer Graphics (edX online course)
-- [ ] How to use Blender
+- [ ] How to use Blender.
 
 ## Companies
 - [ ] Deck Nine Games
