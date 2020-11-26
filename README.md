@@ -2,7 +2,8 @@
 
 ## Courses
 
-- [ ] CSE167X - Intro to Computer Graphics (edX online course)
+- [x] CSE167X - Intro to Computer Graphics (edX online course)
+- [x] CSE168 - Computer Graphics II: Rendering (UCSD online course)
 
 ## Companies
 - [ ] Deck Nine Games
