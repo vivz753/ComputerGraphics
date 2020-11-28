@@ -148,6 +148,16 @@
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FreeImage\FreeImage.h" />
+    <ClInclude Include="src\Vector3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="FreeImage\FreeImage.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FreeImage.dll" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
