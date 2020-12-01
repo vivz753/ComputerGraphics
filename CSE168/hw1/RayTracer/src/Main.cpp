@@ -1,11 +1,15 @@
 #include <iostream>
 #include "FreeImage.h"
 #include "Vector3.h"
+#include "Point3.h"
 
 using namespace std;
 
 typedef Vector3<Float> Vector3f;
 typedef Vector3<int> Vector3i;
+
+typedef Point3<Float> Point3f;
+typedef Point3<int>   Point3i;
 
 void Rasterize() {
 	const int WIDTH(500), HEIGHT(500), BPP(24);

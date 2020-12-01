@@ -147,11 +147,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\Point3.cpp" />
+    <ClCompile Include="src\Point3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FreeImage\FreeImage.h" />
     <ClInclude Include="src\Globals.h" />
+    <ClInclude Include="src\Normal3.h" />
     <ClInclude Include="src\Vector3.h" />
   </ItemGroup>
   <ItemGroup>
