@@ -147,9 +147,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Point3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FreeImage\FreeImage.h" />
+    <ClInclude Include="src\Globals.h" />
     <ClInclude Include="src\Vector3.h" />
   </ItemGroup>
   <ItemGroup>

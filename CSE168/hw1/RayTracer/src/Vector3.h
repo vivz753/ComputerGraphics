@@ -1,23 +1,7 @@
 #pragma once
 #include <iostream>
 #include <cmath>
-
-
-#ifdef NDEBUG
-#define Assert(expr) ((void)0)
-#else
-#define Assert(expr) { if(!(expr)) { std::cerr << "Assertion " << #expr << " failed in " << __FILE__ << " line " << __LINE__ << std::endl; } }
-#endif // NDEBUG
-
-//32-bit floats almost always have sufficient precision for ray tracing, but it’s helpful to be able to switch to double for numerically tricky situations as well as to verify that rounding error with floats isn’t causing errors for a given scene.
-#define PBRT_FLOAT_AS_DOUBLE = 0;
-
-#ifdef PBRT_FLOAT_AS_DOUBLE
-typedef double Float;
-#else
-typedef float Float;
-#endif // PBRT_FLOAT_AS_DOUBLE
-
+#include "Globals.h"
 
 template <typename T> 
 class Vector3 {
@@ -75,7 +59,7 @@ Vector3<T>& operator-=(const Vector3<T>& v) const {
 	return *this;
 }
 
-// Multiplication
+// Multiplication by scalar
 Vector3<T> operator*(T s) const {
 	return Vector3<T>(s * x, s * y, s * z);
 }
@@ -120,7 +104,7 @@ Float Length() const { return std::sqrt(LengthSquared()); }
 
 // Normalize
 template <typename T> inline Vector3<T>
-	Normalize(const Vector3<T>& v) { return v / v.Length(); }
+Normalize(const Vector3<T>& v) { return v / v.Length(); }
 
 // Returns the smallest coord value
 template <typename T> T

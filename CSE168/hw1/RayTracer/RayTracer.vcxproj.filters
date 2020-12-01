@@ -18,12 +18,18 @@
     <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Point3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FreeImage\FreeImage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Vector3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
