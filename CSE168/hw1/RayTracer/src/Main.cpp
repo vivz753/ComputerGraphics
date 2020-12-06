@@ -1,36 +1,35 @@
 #include <iostream>
 #include "FreeImage.h"
-#include "Vector3.h"
-#include "Point3.h"
+#include "color.h"
+#include "vec3.h"
 
 using namespace std;
 
-typedef Vector3<Float> Vector3f;
-typedef Vector3<int> Vector3i;
-
-typedef Point3<Float> Point3f;
-typedef Point3<int>   Point3i;
-
 void Rasterize() {
-	const int WIDTH(500), HEIGHT(500), BPP(24);
+	const int WIDTH(50), HEIGHT(50), BPP(24);
 
 	FreeImage_Initialise();
 
 	FIBITMAP* bitmap = FreeImage_Allocate(WIDTH, HEIGHT, BPP);
-	RGBQUAD color;
+	RGBQUAD *freeimage_color = new RGBQUAD();
 
 	if (!bitmap)
 		exit(1);
 
 	//Draws a gradient from blue to green
 	for (int i = 0; i < WIDTH; i++) {
-		for (int j = 0; j < HEIGHT; j++) {
-			color.rgbRed = 0;
-			color.rgbGreen = (double)i / WIDTH * 255.0;
-			color.rgbBlue = (double)j / HEIGHT * 255.0;
-			FreeImage_SetPixelColor(bitmap, i, j, &color);
+		for (int j = HEIGHT-1; j > 0; j--) {
+			//color.rgbRed = 0;
+			//color.rgbGreen = (double)i / WIDTH * 255.0;
+			//color.rgbBlue = (double)j / HEIGHT * 255.0;
+
+			color pixel_color(0.25, double(i) / WIDTH, double(j) / HEIGHT);
+
+			write_color(std::cout, pixel_color, freeimage_color);
+
+			FreeImage_SetPixelColor(bitmap, i, j, freeimage_color);
 			cout << "pixel: " << i << ", " << j << endl;
-			// Notice the & operator on "color; this passes the pointer to the color struct
+			// Notice the & operator on color; this passes the pointer to the color struct
 		}
 	}
 
@@ -43,9 +42,5 @@ void Rasterize() {
 
 int main() {
 
-	Vector3i v = Vector3i(0, 0, 1);
-	//Vector3<int> v = Vector3<int>(0, 0, 1);
-
-	v = v * 2;
-	v.print();
+	Rasterize();
 }

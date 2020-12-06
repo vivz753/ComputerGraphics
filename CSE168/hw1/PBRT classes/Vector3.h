@@ -1,7 +1,9 @@
+// PBRT code
 #pragma once
 #include <iostream>
 #include <cmath>
 #include "Globals.h"
+#include "Normal3.h"
 
 template <typename T> 
 class Vector3 {
@@ -36,6 +38,8 @@ Vector3(T x, T y, T z)
 	// checking with the Assert() macro, which will disappear from the code after compiled in optimized mode--this saves the expense of verifying this case
 	//Assert(!HasNaNs());
 }
+
+
 
 bool HasNaNs() const {
 	return std::isnan(x) || std::isnan(y) || std::isnan(z);
@@ -101,6 +105,12 @@ Float Length() const { return std::sqrt(LengthSquared()); }
 };
 
 // Why Geometry Inline functions (?)
+
+// Another constructor that allows us to convert from a Normal to a Vector
+template <typename T> inline Normal3<T>
+	Vector3(const Normal3<T>& n) : x(n.x), y(n.y), z(n.z) {
+		Assert(!n.HasNaNs());
+	}
 
 // Normalize
 template <typename T> inline Vector3<T>
@@ -201,3 +211,4 @@ CoordinateSystem(const Vector3<T>& v1, Vector3<T>* v2, Vector3<T>* v3) {
 		std::sqrt(v1.y * v1.y + v1.z * v1.z);
 	*v3 = Cross(v1, *v2);
 }
+

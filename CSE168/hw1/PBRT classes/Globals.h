@@ -1,3 +1,4 @@
+// PBRT code
 #pragma once
 
 #ifdef NDEBUG
