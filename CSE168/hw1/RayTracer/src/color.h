@@ -12,9 +12,10 @@ void write_color(std::ostream& out, color pixel_color, RGBQUAD *color) {
     color->rgbGreen = pixel_color.y() * 255.999;
     color->rgbBlue = pixel_color.z() * 255.999;
 
-    out << static_cast<int>(255.999 * pixel_color.x()) << ' '
-        << static_cast<int>(255.999 * pixel_color.y()) << ' '
-        << static_cast<int>(255.999 * pixel_color.z()) << '\n';
+    // prints out color value
+    //out << static_cast<int>(255.999 * pixel_color.x()) << ' '
+    //    << static_cast<int>(255.999 * pixel_color.y()) << ' '
+    //    << static_cast<int>(255.999 * pixel_color.z()) << '\n';
 }
 
 #endif
