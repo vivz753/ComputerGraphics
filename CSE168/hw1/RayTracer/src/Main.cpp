@@ -1,8 +1,10 @@
 #include <iostream>
 #include "FreeImage.h"
+// common utils and constants
+#include "rtweekend.h"
 #include "color.h"
-#include "vec3.h"
-#include "ray.h"
+#include "sphere.h"
+#include "hittable_list.h"
 
 double hit_sphere(const point3& center, double radius, const ray& r)
 {
@@ -30,17 +32,16 @@ double hit_sphere(const point3& center, double radius, const ray& r)
 	}
 }
 
-color ray_color(const ray& r) {
-	// get the hit points on the sphere, color their normals
-	auto t = hit_sphere(point3(0, 0, -1), 0.5, r);
-	if (t > 0.0) {
-		vec3 N = unit_vector(r.at(t) - vec3(0, 0, -1));
-		return 0.5 * color(N.x() + 1, N.y() + 1, N.z() + 1);
+color ray_color(const ray& r, const hittable& world) {
+	hit_record rec;
+
+	if (world.hit(r, 0, infinity, rec)) {
+		return 0.5 * (rec.normal + color(1, 1, 1));
 	}
 
 	// else return the gradient background sky
 	vec3 unit_direction = unit_vector(r.direction());
-	t = 0.5 * (unit_direction.y() + 1.0);
+	auto t = 0.5 * (unit_direction.y() + 1.0);
 	return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
 }
 
@@ -56,16 +57,26 @@ void PrintProgress(int i, int j, int imageWidth, int imageHeight, int progressAr
 
 void Rasterize(double aspectRatio, int imageWidth, int bitsPerPixel) {
 
+	// Image
+
 	const int imageHeight = static_cast<int>(imageWidth / aspectRatio);
 
 	// FreeImage setup
+
 	FreeImage_Initialise();
 	FIBITMAP* bitmap = FreeImage_Allocate(imageWidth, imageHeight, bitsPerPixel);
 	RGBQUAD *freeimage_color = new RGBQUAD();
 	if (!bitmap)
 		exit(1);
 
+	// World
+
+	hittable_list world;
+	world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));
+	world.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
+
 	// Camera
+
 	// the viewport AKA near clipping plane
 	auto viewportHeight = 2.0;
 	auto viewportWidth = aspectRatio * viewportHeight;
@@ -77,11 +88,13 @@ void Rasterize(double aspectRatio, int imageWidth, int bitsPerPixel) {
 	// we subtract the focalLength bc we are looking into the -z axis, to respect the RH-coordinate system
 	auto lowerLeftCorner = origin - horizontal / 2 - vertical / 2 - vec3(0, 0, focalLength);
 
+	// Progress tracker setup
+
 	// for progress tracking
 	std::cout << "imageWidth: " << imageWidth << " imageHeight: " << imageHeight << "\n" << std::endl;
 	int printProgress[100] = {};
 
-	//Draws a gradient from blue to green
+	// Render loop
 	for (int i = 0; i < imageWidth; i++) {
 		for (int j = imageHeight-1; j > 0; j--) {
 
@@ -92,7 +105,7 @@ void Rasterize(double aspectRatio, int imageWidth, int bitsPerPixel) {
 			auto u = double(i) / (imageWidth-1);
 			auto v = double(j) / (imageHeight-1);
 			ray r(origin, lowerLeftCorner + u * horizontal + v * vertical - origin);
-			color pixel_color = ray_color(r);
+			color pixel_color = ray_color(r, world);
 
 			// converts our color object to RGBQUAD for FreeImage
 			write_color(std::cout, pixel_color, freeimage_color);
