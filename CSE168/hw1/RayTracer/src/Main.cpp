@@ -13,29 +13,24 @@ double hit_sphere(const point3& center, double radius, const ray& r)
 	// so (A + tb - C)^2 = r^2 can be expanded to a quadratic equation t^2*b^2 + 2tb(A-C) + (A-C)^2 = r^2 which is in the form of Ax^2 + Bx + C = 0 if we move r^2 to the left side
 	// t is the unknown, so it represents the x in the quadratic eq
 	// a = t^2*b^2 or tb*tb since tb is the direction in P = A + tb
-	auto a = dot(r.direction(), r.direction());
+	auto a = r.direction().length_squared();
 	// b = 2*tb*(A-C)
-	auto b = 2.0 * dot(oc, r.direction());
+	auto half_b = dot(oc, r.direction());
 	// c = (A-C)*(A-C) - r^2
-	auto c = dot(oc, oc) - radius * radius;
+	auto c = oc.length_squared() - radius * radius;
 	// uses the quadratic formula's b2-4ac to find real roots
-	auto discriminant = b * b - 4 * a * c;
+	auto discriminant = half_b * half_b - a * c;
 	// return real roots
 
 	if (discriminant < 0) {
 		return -1.0;
 	}
 	else {
-		return (-b - sqrt(discriminant)) / (2.0 * a);
+		return (-half_b - sqrt(discriminant)) / a;
 	}
 }
 
 color ray_color(const ray& r) {
-	// if ray hits sphere at 0, 0, -1 w/ a radius of 0.5, return red color
-	//if (hit_sphere(point3(0, 0, -1), 0.5, r)) {
-	//	return color(1, 0, 0);
-	//}
-
 	// get the hit points on the sphere, color their normals
 	auto t = hit_sphere(point3(0, 0, -1), 0.5, r);
 	if (t > 0.0) {
