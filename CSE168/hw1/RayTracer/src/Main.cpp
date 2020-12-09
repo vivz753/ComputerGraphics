@@ -4,7 +4,7 @@
 #include "vec3.h"
 #include "ray.h"
 
-bool hit_sphere(const point3& center, double radius, const ray& r)
+double hit_sphere(const point3& center, double radius, const ray& r)
 {
 	// ray from center of sphere to eye
 	vec3 oc = r.origin() - center;
@@ -21,17 +21,31 @@ bool hit_sphere(const point3& center, double radius, const ray& r)
 	// uses the quadratic formula's b2-4ac to find real roots
 	auto discriminant = b * b - 4 * a * c;
 	// return real roots
-	return discriminant > 0;
+
+	if (discriminant < 0) {
+		return -1.0;
+	}
+	else {
+		return (-b - sqrt(discriminant)) / (2.0 * a);
+	}
 }
 
 color ray_color(const ray& r) {
 	// if ray hits sphere at 0, 0, -1 w/ a radius of 0.5, return red color
-	if (hit_sphere(point3(0, 0, -1), 0.5, r)) {
-		return color(1, 0, 0);
+	//if (hit_sphere(point3(0, 0, -1), 0.5, r)) {
+	//	return color(1, 0, 0);
+	//}
+
+	// get the hit points on the sphere, color their normals
+	auto t = hit_sphere(point3(0, 0, -1), 0.5, r);
+	if (t > 0.0) {
+		vec3 N = unit_vector(r.at(t) - vec3(0, 0, -1));
+		return 0.5 * color(N.x() + 1, N.y() + 1, N.z() + 1);
 	}
+
 	// else return the gradient background sky
 	vec3 unit_direction = unit_vector(r.direction());
-	auto t = 0.5 * (unit_direction.y() + 1.0);
+	t = 0.5 * (unit_direction.y() + 1.0);
 	return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
 }
 
@@ -104,7 +118,7 @@ void Rasterize(double aspectRatio, int imageWidth, int bitsPerPixel) {
 int main() {
 
 	const double aspectRatio = 16.0 / 9.0;
-	const int imageWidth = 5000;
+	const int imageWidth = 500;
 	const int bitsPerPixel = 24;
 	Rasterize(aspectRatio, imageWidth, bitsPerPixel);
 }

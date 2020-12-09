@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="src\color.h" />
     <ClInclude Include="FreeImage\FreeImage.h" />
+    <ClInclude Include="src\hittable.h" />
     <ClInclude Include="src\ray.h" />
     <ClInclude Include="src\vec3.h" />
   </ItemGroup>
