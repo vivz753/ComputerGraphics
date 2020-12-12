@@ -18,6 +18,9 @@
     <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FreeImage\FreeImage.h">
@@ -53,5 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FreeImage.dll" />
+    <None Include="src\scene4-ambient.test" />
   </ItemGroup>
 </Project>
